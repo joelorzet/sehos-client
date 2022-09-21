@@ -76,9 +76,33 @@ const Shoe: React.FC<Props> = props => {
             toast.success(<b>Correctly updated amount!</b>);
           }
         } else {
-          dispatch(addToLocalCart(cartProduct))
-          toast.success(<b>Product added!!</b>);
-        }
+          const options: any = {}
+          cartProduct?.size?.map(p => { options[p.size ? p.size : 0] = p.size })
+          Swal.fire({
+          title: 'Please, set extra info',
+          icon: 'question',
+          showConfirmButton: true,
+          showCancelButton: true,
+          input: 'select',
+          inputOptions: options,
+          inputPlaceholder: 'Please select a size',
+          cancelButtonColor: '#d33'
+            }).then(async (result) => {
+            if (result.isConfirmed) {
+              const sizeFinded = cartProduct?.size?.find(el => el.size === result.value)
+              if(sizeFinded?.stock === 0) {
+                Swal.fire({
+                  text: "Can't add this products cause there is not more stock available",
+                  icon: 'warning'
+                })
+              } else {
+                cartProduct.sizeCart = sizeFinded
+                dispatch(addToLocalCart(cartProduct))
+                toast.success(<b>Product added!!</b>);
+              }
+            }
+        })
+      }  
     } else {
         if(findedProduct) {
           const maxStock = findedProduct?.sizeCart?.stock && findedProduct.quantity && (findedProduct.sizeCart.stock - findedProduct.quantity)
