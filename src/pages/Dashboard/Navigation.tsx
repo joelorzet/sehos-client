@@ -33,7 +33,6 @@ export default function Navigation() {
 
   function handleClick(event: React.MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
-    console.info('You clicked a breadcrumb.');
   }
 
   return (
