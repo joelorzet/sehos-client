@@ -29,8 +29,8 @@ export const store = configureStore({
     sizes,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: (getDefaultMiddleware: () => string | any[]) => getDefaultMiddleware().concat(apiSlice.middleware),
-  devTools: process.env.NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: false,
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
