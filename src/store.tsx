@@ -1,16 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import products from './features/product/productSlice';
-import cart from './features/cart/CartSlice';
-import cartApiSlice, { getApiUserCart } from './features/cart/cartApiSlice';
-import auth from './features/auth/authSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { apiSlice } from './features/api/apiSlice';
-import checkout from './features/checkout/checkoutSlice';
-import user from './features/user/userSlice';
-import sizes from './features/sizes/sizesSlice';
-import colors from './features/colors/getColorsSlice';
-import categories from './features/category/categoriesSlice'
 import admin from './features/admin/adminSlice';
+import { apiSlice } from './features/api/apiSlice';
+import auth from './features/auth/authSlice';
+import cartApiSlice from './features/cart/cartApiSlice';
+import cart from './features/cart/CartSlice';
+import categories from './features/category/categoriesSlice';
+import checkout from './features/checkout/checkoutSlice';
+import colors from './features/colors/getColorsSlice';
+import products from './features/product/productSlice';
+import sizes from './features/sizes/sizesSlice';
+import user from './features/user/userSlice';
 
 // importamos el export default que viene del slice
 
@@ -29,8 +29,8 @@ export const store = configureStore({
     sizes,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
-  devTools: true,
+  middleware: (getDefaultMiddleware: () => string | any[]) => getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
