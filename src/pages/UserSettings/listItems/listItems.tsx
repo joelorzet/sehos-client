@@ -50,12 +50,12 @@ export const mainListItems = (
       </ListItemButton>
     </NavLink>
     {/*  */}
-    <ListItemButton>
+    {/* <ListItemButton>
       <ListItemIcon>
         <DeleteForeverIcon />
       </ListItemIcon>
       <ListItemText primary='Delete Account' />
-    </ListItemButton>
+    </ListItemButton> */}
   </React.Fragment>
 );
 
