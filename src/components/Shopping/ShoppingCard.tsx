@@ -97,15 +97,22 @@ export default function CardShop(product: Partial<CartI>) {
     if (auth.user) setSizeChanged(e.target.value);
     else {
       const findedSize = product?.size?.find(el => el.size === e.target.value);
-      product.idProduct &&
-        findedSize &&
-        dispatch(
-          updateLocalCart({
-            method: e.currentTarget.name,
-            id: product.idProduct,
-            sizes: findedSize,
-          }),
-        );
+      if(findedSize?.stock === 0) {
+        Swal.fire({
+          text: "Can't add this products cause there is not more stock available",
+          icon: 'warning'
+        })
+      } else {
+        product.idProduct &&
+          findedSize &&
+          dispatch(
+            updateLocalCart({
+              method: e.currentTarget.name,
+              id: product.idProduct,
+              sizes: findedSize,
+            }),
+          );
+      }
     }
   };
 

@@ -22,7 +22,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { addToLocalCart, CartI, updateLocalCart } from '../../features/cart/CartSlice';
 import { setApiUserCart, updateApiUserCart } from '../../features/cart/cartApiSlice';
 import Swal from 'sweetalert2';
-import { useCreateFavouritesMutation, useGetFavouritesQuery } from '@/features/favourites/favouritesApiSlice';
+import { useCreateFavouritesMutation, useDeleteFavouritesMutation, useGetFavouritesQuery } from '@/features/favourites/favouritesApiSlice';
 
 interface Props extends ProductPartial {
   addTouched: Function
@@ -36,10 +36,15 @@ const Shoe: React.FC<Props> = props => {
   const userInfo = window.localStorage.getItem('userInfo') ? JSON.parse(window.localStorage.getItem('userInfo') as string) : null
   const {products, loading} = useSelector((state:RootState) => user.user ? state.apiCart : state.cart)
   const findedProduct = products.find((el: CartI) => el.idProduct === props.id)
-  const { data: favs, error, isSuccess} = useGetFavouritesQuery(user.id);
+  const getFavs = () => {
+    let data;
+    if(user.id) data = useGetFavouritesQuery(user.id).data
+    return data
+  }
+  const favs = getFavs()
   const findedFav = favs?.find(el => el.id_details === props.id)
-  const [createFavourites, {data, isLoading}] = useCreateFavouritesMutation()
-  
+  const [deleteFavourites, {isLoading: deleteLoading}] = useDeleteFavouritesMutation()
+  const [createFavourites, {isLoading}] = useCreateFavouritesMutation() 
  
   const cartProduct:CartI = {
     idUser: user.user ? userInfo.id : null,
@@ -170,10 +175,35 @@ const Shoe: React.FC<Props> = props => {
 
   const updateFavs = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    props.addTouched(e.currentTarget.id)
-    props.id && await createFavourites({id_user: user.id, id_product_details: props.id})
-    toast.success(<b>Correctly added to favs!</b>);
+    if(!user.user){
+      Swal.fire({
+        text: "Can't add to favourites, please Login first",
+        icon: 'warning'
+      })
+    } else {
+        const findedFavs = favs?.find(f => f.id_details === props.id)
+        props.addTouched(e.currentTarget.id)
+        if(findedFavs) {
+          props.id && await deleteFavourites({id_user: user.id, id_product_details: props.id})
+          toast.success(<b>Correctly removed from favs!</b>);
+        } else {
+          props.id && await createFavourites({id_user: user.id, id_product_details: props.id})
+          toast.success(<b>Correctly added to favs!</b>);
+        }
+    }
   }
+
+  const shareLink = (e: React.MouseEvent<HTMLButtonElement>) => {  
+      props.addTouched(e.currentTarget.id)
+      let auxInput = document.createElement("input");
+      auxInput.setAttribute("value", `https://sehos-client.vercel.app${PublicRoutes.products}/${props.id}`);
+      document.body.appendChild(auxInput);
+      auxInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(auxInput);
+      toast.success(<b>Share link copy!</b>);
+  }
+
   return (
     <>
       <Card
@@ -219,11 +249,16 @@ const Shoe: React.FC<Props> = props => {
             aria-label='add to cart'
             id={`Fid${props.id}`}
             onClick={updateFavs}
-            disabled={isLoading}
+            disabled={isLoading || deleteLoading}
             >    
             {findedFav ? <Favorite/> : <FavoriteBorder />}
           </IconButton>
-          <IconButton color='inherit' aria-label='share'>
+          <IconButton 
+            color='inherit' 
+            aria-label='share'
+            id={`Sid${props.id}`}
+            onClick={shareLink}
+            >
             <ShareIcon />
           </IconButton>
           <IconButton
