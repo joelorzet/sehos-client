@@ -1,0 +1,1 @@
+import{j as o,c as r,W as e,v as s}from"./index.a66382f1.js";function i(){return o("div",{children:[r("h1",{children:"Whoops!"}),r("h2",{children:"404 Page Not Found"}),o("p",{children:["Try our ",r(e,{to:s.start,children:"homepage"})," or"," ",r(e,{to:s.home,children:"products"})," instead."]})]})}export{i as default};
