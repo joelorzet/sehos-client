@@ -78,7 +78,7 @@ export default function Login() {
       email: res.profileObj.email,
       password: res.googleId,
     };
-    console.log(setGoogleData, loginUserData)
+    
     try {
       const Logged = await login(loginUserData).unwrap();
 
