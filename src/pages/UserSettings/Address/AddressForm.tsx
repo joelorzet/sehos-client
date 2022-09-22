@@ -38,8 +38,8 @@ export default function AddressForm() {
       createAddress(newAddress)
         .then(() => {
           Swal.fire({
-            title: 'Update!',
-            text: 'You clicked the button!',
+            title: 'Succesfull!',
+            text: 'You add a new Address!',
             icon: 'success',
             confirmButtonColor: '#5d3a00',
           });

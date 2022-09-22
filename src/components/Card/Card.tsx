@@ -196,7 +196,7 @@ const Shoe: React.FC<Props> = props => {
   const shareLink = (e: React.MouseEvent<HTMLButtonElement>) => {  
       props.addTouched(e.currentTarget.id)
       let auxInput = document.createElement("input");
-      auxInput.setAttribute("value", `https://sehos-client.vercel.app${PublicRoutes.products}/${props.id}`);
+      auxInput.setAttribute("value", `https://sehos.netlify.app${PublicRoutes.products}/${props.id}`);
       document.body.appendChild(auxInput);
       auxInput.select();
       document.execCommand("copy");

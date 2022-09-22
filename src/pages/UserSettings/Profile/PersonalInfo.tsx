@@ -19,23 +19,30 @@ const validations = yup.object({
     .string()
     .nullable()
     .min(3, 'Min 3 characters')
-    .max(50, 'Max 50 characters')
-    .required('Required'),
+    .max(50, 'Max 50 characters'),
   last_name: yup
     .string()
     .nullable()
     .min(3, 'Min 3 characters')
-    .max(50, 'Max 50 characters')
-    .required('Required'),
+    .max(50, 'Max 50 characters'),
   identification: yup
     .number()
     .nullable()
-    .max(9999999999, '10 characters maximun')
-    .required('Required'),
-  birth_date: yup.string().nullable().required('Required'),
+    .max(9999999999, '10 characters maximun'),
+  birth_date: yup.string().nullable(),
 });
 
-export default function PersonalInfo({ handleClose }: any) {
+const validateData = (data: any) => {
+  let newData: any = {}
+  
+  for(const val in data) {
+    if(!Boolean(data[val])) delete data[val]
+    else newData[val] = data[val]
+  }
+  return newData;
+}
+
+export default function PersonalInfo({ handleClose }: {handleClose: Function}) {
   const [updateUser, result] = useUpdateUserMutation();
   const [edit, setEdit] = useState(true);
   const auth = useAuth();
@@ -43,21 +50,22 @@ export default function PersonalInfo({ handleClose }: any) {
 
   const initialValues = {
     id: auth.id,
-    name: null,
-    last_name: null,
+    name: '',
+    last_name: '',
     birth_date: null,
-    identification: null,
+    identification: undefined,
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema: validations,
     onSubmit: (values: any, { resetForm }: any) => {
-      updateUser(values)
+      const validated = validateData(values)
+      updateUser(validated)
         .then(() => handleClose())
         .then(() =>
           Swal.fire({
-            title: 'Update Data',
+            title: 'Data successfully updated',
             icon: 'success',
             confirmButtonColor: '#5d3a00',
           }),
@@ -162,7 +170,7 @@ export default function PersonalInfo({ handleClose }: any) {
               type='submit'
               color='secondary'
               variant='contained'
-              disabled={!isValid || edit}
+              disabled={!isValid || (formik.values.name === '' && formik.values.last_name === '' && formik.values.birth_date === null && formik.values.identification === undefined)}
               sx={{ mt: 3, mb: 2 }}>
               {result.isLoading ? <CircularProgress size={20} color='primary' /> : 'update'}
             </Button>

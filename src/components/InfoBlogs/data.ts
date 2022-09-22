@@ -3,15 +3,15 @@ export const dataBlog = [
     title: 'Sandalia',
     description: 'La sandalia de tacón medio y tiras que querrás este verano',
     image:
-      'http://zapatosymujer.es/zym/wp-content/uploads/2017/07/sandalia-Gloria-negro-pies-2.jpg',
-    link: 'http://zapatosymujer.es/2017/07/la-sandalia-de-tacon-medio-y-tiras-que-querras-este-verano.html',
+      'https://cdn.shopify.com/s/files/1/0582/5957/0852/articles/zapatos_ca354447-28bb-4016-a71a-9492817aaefb_600x.jpg?v=1645806200',
+    link: 'https://mas34shop.com/blogs/news/como-combinar-las-sandalias-de-tacon-esta-temporada-tendencias',
     columns: 8,
   },
   {
     title: 'Tacon',
     description: 'Los zapatos de tacón que llevaremos esta primavera',
-    image: 'http://zapatosymujer.es/zym/wp-content/uploads/2017/02/IMG_20170208_225128_946.jpg',
-    link: 'http://zapatosymujer.es/2017/02/los-zapatos-de-tacon-que-llevaremos-esta-primavera.html',
+    image: 'https://www.cutypaste.com/wp-content/uploads/2018/07/cobertura.jpg',
+    link: 'https://www.cutypaste.com/tag/tacones/',
     columns: 4,
   },
   {
