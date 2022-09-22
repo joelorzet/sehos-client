@@ -32,7 +32,9 @@ export const FavouritesCards = () => {
                   sx={{ color: 'primary.main', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                   open={true}
                 ><CircularProgress color="inherit" size={200}/></Backdrop>}
-        {favs?.map(fav =>  
+        {!favs?.length && <Typography mt={2} variant='h6' fontWeight={100}>
+            There are no favourites products, go to products section and select your favourites!</Typography>}
+        {favs && favs.map(fav =>  
             (<>
                 <Card
                 key={fav.id_details}
