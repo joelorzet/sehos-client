@@ -33,7 +33,7 @@ export const FavouritesCards = () => {
                   open={true}
                 ><CircularProgress color="inherit" size={200}/></Backdrop>}
         {!favs?.lenght && <Typography mt={2} variant='h6' fontWeight={100}>There are no favourites products, go to products section and select your favourites!</Typography>}
-        {favs?.map(fav =>  
+        {favs?.map((fav: any) =>  
             (<>
                 <Card
                 key={fav.id_details}
