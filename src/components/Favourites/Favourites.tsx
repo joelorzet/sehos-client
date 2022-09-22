@@ -63,7 +63,7 @@ export const FavouritesCards = () => {
                     />
                     <IconButton
                     disabled={deleteLoading} 
-                    onClick={(e) => handleClick(e, fav.id_details)}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e, fav.id_details)}
                     >
                         <Delete/>
                     </IconButton>
