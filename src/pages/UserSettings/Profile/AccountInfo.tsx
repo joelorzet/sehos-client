@@ -20,7 +20,7 @@ const validations = yup.object({
     .min(3, 'Min 3 characters')
     .max(50, 'Max 50 characters')
     .nullable(),
-  phone: yup.string().nullable().required('Phone is required'),
+  phone: yup.string().nullable(),
 });
 
 const validateData = (data: any) => {
