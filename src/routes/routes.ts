@@ -40,7 +40,7 @@ export const PrivatesRoutes = {
 };
 
 export const URL = {
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://sehos.herokuapp.com',
 };
 
 export const Endpoint = {
