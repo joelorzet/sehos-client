@@ -49,11 +49,8 @@ export default function ProductDetail() {
     price: shoe.sell_price,
     quantity: 1,
   };
-  const maxGralStock = !user
-    ? cartProduct?.sizeCart?.stock &&
-      findedProduct?.quantity &&
-      cartProduct.sizeCart.stock - findedProduct.quantity
-    : findedProduct?.sizeCart?.stock &&
+  const maxGralStock = 
+      findedProduct?.sizeCart?.stock &&
       findedProduct.quantity &&
       findedProduct.sizeCart.stock - findedProduct.quantity;
 
@@ -80,11 +77,7 @@ export default function ProductDetail() {
     e.preventDefault();
     if (!user) {
       if (findedProduct) {
-        const maxStock =
-          cartProduct?.sizeCart?.stock &&
-          findedProduct.quantity &&
-          cartProduct.sizeCart.stock - findedProduct.quantity;
-        if (maxStock === 0) {
+        if (maxGralStock === 0) {
           Swal.fire({
             title: 'Wait!',
             icon: 'error',
@@ -96,20 +89,25 @@ export default function ProductDetail() {
           toast.success(<b>Correctly updated amount!</b>);
         }
       } else {
-        dispatch(addToLocalCart(cartProduct));
-        Swal.fire({
-          icon: 'success',
-          text: 'Product added successfully',
-          showConfirmButton: true,
-        });
+        const sizeFinded = cartProduct?.size?.find(el => el.size === sizeValue.value)
+        if(sizeFinded?.stock === 0) {
+          Swal.fire({
+            text: "Can't add this products cause there is not more stock available",
+            icon: 'warning'
+          })
+        } else {
+          cartProduct.sizeCart = sizeFinded
+          dispatch(addToLocalCart(cartProduct));
+          Swal.fire({
+            icon: 'success',
+            text: 'Product added successfully',
+            showConfirmButton: true,
+          });
+        }
       }
     } else {
       if (findedProduct) {
-        const maxStock =
-          findedProduct?.sizeCart?.stock &&
-          findedProduct.quantity &&
-          findedProduct.sizeCart.stock - findedProduct.quantity;
-        if (maxStock === 0) {
+        if (maxGralStock === 0) {
           Swal.fire({
             title: 'Wait!',
             icon: 'error',
@@ -121,12 +119,12 @@ export default function ProductDetail() {
           Swal.fire({
             title: 'Wait! that products is already on your cart, we will add this',
             html:
-              `<p>Current Available Stock: ${maxStock}</p>` +
+              `<p>Current Available Stock: ${maxGralStock}</p>` +
               `<p>Current Selected Size: ${findedProduct.sizeCart?.size}</p>`,
             input: 'number',
             inputAttributes: {
               autocapitalize: 'off',
-              max: `${maxStock}`,
+              max: `${maxGralStock}`,
             },
             showCancelButton: true,
             confirmButtonText: 'Update',

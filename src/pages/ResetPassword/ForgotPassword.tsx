@@ -24,8 +24,8 @@ function ForgotPassword() {
       .then(() => {
         handleCloseBackdrop();
         Swal.fire({
-          title: 'Email enviado correctamente',
-          text: 'Revise su casilla de correo para seguir las instrucciones.',
+          title: 'Email successfully sended',
+          text: 'Please check your email box and follow the instructions',
           icon: 'success',
           showConfirmButton: false,
           timer: 2000,
@@ -38,9 +38,9 @@ function ForgotPassword() {
         handleCloseBackdrop();
         Swal.fire({
           title: 'Error',
-          text: 'Ha ocurrido un error!',
+          text: 'Oops, something went wrong!',
           icon: 'error',
-          confirmButtonText: 'Intentalo de nuevo!',
+          confirmButtonText: 'Try Again!',
         });
       });
   };
@@ -65,14 +65,14 @@ function ForgotPassword() {
             <TextField
               id='email'
               variant='outlined'
-              label='Ingrese su email'
+              label='Enter your email'
               color='secondary'
               value={email}
               onChange={onChange}
             />
 
             <Button variant='contained' endIcon={<SendIcon />} onClick={onClick}>
-              Recuperar cuenta
+              Recover Account
             </Button>
           </Box>
         </Paper>

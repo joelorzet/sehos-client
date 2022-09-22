@@ -36,13 +36,8 @@ const Shoe: React.FC<Props> = props => {
   const userInfo = window.localStorage.getItem('userInfo') ? JSON.parse(window.localStorage.getItem('userInfo') as string) : null
   const {products, loading} = useSelector((state:RootState) => user.user ? state.apiCart : state.cart)
   const findedProduct = products.find((el: CartI) => el.idProduct === props.id)
-  const getFavs = () => {
-    let data;
-    if(user.id) data = useGetFavouritesQuery(user.id).data
-    return data
-  }
-  const favs = getFavs()
-  const findedFav = favs?.find(el => el.id_details === props.id)
+  const {data: favs} = useGetFavouritesQuery(user.id)
+  const findedFav = favs?.find((el: any) => el.id_details === props.id)
   const [deleteFavourites, {isLoading: deleteLoading}] = useDeleteFavouritesMutation()
   const [createFavourites, {isLoading}] = useCreateFavouritesMutation() 
  
@@ -68,7 +63,7 @@ const Shoe: React.FC<Props> = props => {
     props.addTouched(e.currentTarget.id)
     if(!user.user) {
         if(findedProduct) {
-          const maxStock = cartProduct?.sizeCart?.stock && findedProduct.quantity && (cartProduct.sizeCart.stock - findedProduct.quantity)
+          const maxStock = findedProduct?.sizeCart?.stock && findedProduct.quantity && (findedProduct.sizeCart.stock - findedProduct.quantity)
           if(maxStock === 0) {
             Swal.fire({
               title: 'Wait!',
@@ -181,9 +176,8 @@ const Shoe: React.FC<Props> = props => {
         icon: 'warning'
       })
     } else {
-        const findedFavs = favs?.find(f => f.id_details === props.id)
         props.addTouched(e.currentTarget.id)
-        if(findedFavs) {
+        if(findedFav) {
           props.id && await deleteFavourites({id_user: user.id, id_product_details: props.id})
           toast.success(<b>Correctly removed from favs!</b>);
         } else {

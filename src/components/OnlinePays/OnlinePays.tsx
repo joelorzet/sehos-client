@@ -10,13 +10,14 @@ import StripePay from './StripePay/StripePay';
 import { useGetAddressQuery } from '@/features';
 import { useNavigate } from 'react-router-dom';
 import { PublicRoutes } from "../../routes/routes"
+import Swal from 'sweetalert2'
 
 
 export default function OnlinePays() {
   const currentUser = useSelector((state:RootState) => state.user)
   const currentCart = useSelector((state:RootState) => state.apiCart)
   const navigate = useNavigate()
-  const {data: addresses, isLoading} = useGetAddressQuery()
+  const {data: addresses} = useGetAddressQuery()
   const deliveryAddress = JSON.parse(window.localStorage.getItem('deliveryAddress') as string)
   const [openCart, setOpenCart] = React.useState(false);
   const [openDelivery, setOpenDelivery] = React.useState(false);
@@ -27,6 +28,35 @@ export default function OnlinePays() {
     if(method === 'delivery') setOpenDelivery(!openDelivery);
     if(method === 'payment') setOpenPayment(!openPayment);
   };
+
+  React.useEffect(() => {
+
+  },[openDelivery])
+
+  const changeAddress = () => {
+    const options: any = {}
+    addresses?.map((a: any) => { options[a.id ? a.id : 0] = `${a.address} - ${a.city}`})
+    Swal.fire({
+    title: 'Please, select one address',
+    icon: 'question',
+    showConfirmButton: true,
+    showCancelButton: true,
+    input: 'select',
+    inputOptions: options,
+    inputPlaceholder: 'Available addresses',
+    cancelButtonColor: '#d33'
+      }).then(async (result) => {
+      if (result.isConfirmed) {
+        const addressSelected = addresses?.find((el:any) => el.id.toString() === result.value)
+        window.localStorage.setItem('deliveryAddress', JSON.stringify(addressSelected))
+        setOpenDelivery(false)
+        Swal.fire({
+          icon:'success',
+          text: 'address changed successfully'
+        })
+      }
+    })
+  }
 
   return (
     <Container>
@@ -92,7 +122,7 @@ export default function OnlinePays() {
           </ListSubheader>
           <Box sx={{ width: '100%', display:'flex', alignItems:'center', gap:10}}>
             <Typography>{deliveryAddress?.address} - {deliveryAddress?.city},{deliveryAddress?.state}</Typography>
-            <Button variant='contained'>Change</Button>
+            <Button variant='contained' onClick={changeAddress}>Change</Button>
           </Box>
         </Collapse>
       </List>
