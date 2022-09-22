@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import { RootState } from '../../../../store';
 import { useAuth } from '@/hooks/useAuth';
 import Divider from '@mui/material/Divider';
-
+import Swal from 'sweetalert2';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 // import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -18,14 +18,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../../../../components/Copyright/Copyright';
-import {
-  Field,
-  FieldArray,
-  useFormik,
-  validateYupSchema,
-  FormikProvider,
-  setNestedObjectValues,
-} from 'formik';
+import { Field, FieldArray, useFormik, validateYupSchema, FormikProvider, setNestedObjectValues } from 'formik';
 import * as yup from 'yup';
 // import { useNavigate } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -35,24 +28,45 @@ import { getSizes } from '@/features/sizes/sizesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetCategoriesQuery, useGetProductQuery } from '@/features';
 import axios from 'axios';
-import DeleteProduct from './DeleteProduct';
+import DeleteProduct from './DeleteProduct'
 import UpdateStock from './StockUpdate';
 import { Endpoint } from '@/routes/routes';
+import { array } from 'yup/lib/locale';
+
+export const testLength = (value: any) => {
+  value.length > 0 ? true : false
+}
 /* VALIDACIONES */
 const validations = yup.object({
-  name: yup.string().required('Name is required'),
+  file: yup.mixed().test('size', 'falta agregar algo', (value)=>value.length>0).required(),
+  name: yup.string().required('casco'),
   description: yup.string().required('Description is required'),
   buy_price: yup
     .number()
-    .positive('This value is positive value')
-    .min(0, 'This value is not < 0')
+    .positive('This value must be a positive value')
+    .min(1, 'The value must be bigger than 0')
     .required('This camp is required'),
   sell_price: yup
     .number()
     .positive('This value is positive value')
     .moreThan(yup.ref('buy_price'), `The value sell must be greater than buy price`)
-    .required('This camp is require'),
-  // images: yup
+    .required('This camp is required'),
+  gender: yup
+    .string()
+    .required('Specify at least one gender'),
+  season: yup
+    .string()
+    .required('Select at least one season'),
+  details: yup.object({
+    size: yup.array()
+      .of(
+        yup.object().shape({
+          stock: yup.string(),
+        })
+      )
+      .min(1, 'required-field'), // <– `.min(1)` instead of `.required()`
+  }).required()
+  // file: yup
   //   .mixed()
   //   .required('A file is required')
   //   .test('fileSize', 'File too large', value => value && value.size <= FILE_SIZE)
@@ -62,61 +76,53 @@ const validations = yup.object({
   //     value => value && SUPPORTED_FORMATS.includes(value.type),
   //   ),
 });
-//
+// 
 /* COMPONENT */
-// const isLoggedIn = useSelector((state: IRootState) => state.user.loggedIn)
 export default function AddProduct() {
-  const dispatch = useDispatch();
-  const sizes: any = useSelector((state: RootState) => state.sizes);
-  const {
-    data: categories,
-    error: errorC,
-    isLoading: isLoadingC,
-    isError: isErrorC,
-    isSuccess: isSuccessC,
-    currentData: currentDataC,
-  } = useGetCategoriesQuery();
-
+  const dispatch = useDispatch()
+  const sizes: any = useSelector((state: RootState) => state.sizes)
+  const { data: categories, error: errorC, isLoading: isLoadingC, isError: isErrorC, isSuccess: isSuccessC, currentData: currentDataC } = useGetCategoriesQuery()
   useEffect(() => {
-    dispatch(getSizes());
-  }, []);
+    dispatch(getSizes())
+  }, [])
   /* HOOKS */
-  const auth = useAuth();
+  const auth = useAuth()
   const formik = useFormik({
-    initialValues: {
-      //!import correcto de los size y las categories
+    initialValues: {  //!import correcto de los size y las categories
       id_category: '', //! ver que esté cambiado category ->  id_category
       name: '',
       description: '',
       gender: '',
       season: '',
-      buy_price: 0,
-      sell_price: 0,
+      buy_price: '',
+      sell_price: '',
+      file: '',
       details: {
         id_color: 1, //!   id color ver como registrar
-        size: [{ id: '', stock: 0 }], //!sizes : ver que se envie un id y un stock en total
-      },
-      file: [],
+        size: [{ id: 1, stock: 0 }]  //!sizes : ver que se envie un id y un stock en total 
+      }
     },
     validationSchema: validations,
-    onSubmit: values => {
-      handleFormSubmit(values);
+    onSubmit: (values, { resetForm }: any) => {
+      handleFormSubmit(values)
+      Swal.fire({
+        text: '¡Producto creado con éxito !'
+      });
+      resetForm()
     },
+
   });
   const handleFormSubmit = async (values: any) => {
-    const formData = new FormData();
-    formData.append('body', JSON.stringify(values));
+    const formData = new FormData()
+    formData.append("body", JSON.stringify(values))
     if (values.file) {
       for (let filo of values.file) {
-        formData.append('image', filo);
+        formData.append("image", filo)
       }
+      console.log(formData)
     }
-    const prueba = await fetch(Endpoint.postProduct, {
-      method: 'POST',
-      body: formData,
-      headers: { Authorization: `bearer ${auth.token}` },
-    });
-  };
+    await fetch(Endpoint.postProduct, { method: "POST", body: formData, headers: { "Authorization": `bearer ${auth.token}` } });
+  }
 
   return (
     <FormikProvider value={formik}>
@@ -133,14 +139,7 @@ export default function AddProduct() {
             Create Product
           </Typography>
           <Divider style={{ width: '100%' }} variant='middle' />
-          <Box
-            component='form'
-            noValidate
-            onSubmit={formik.handleSubmit}
-            method='POST'
-            action={Endpoint.postProduct}
-            encType='multipart/form-data'
-            sx={{ mt: 3 }}>
+          <Box component='form' noValidate onSubmit={formik.handleSubmit} method='POST' action={Endpoint.postProduct} encType='multipart/form-data' sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               {/* NAME */}
               <Grid item xs={12} sm={12}>
@@ -261,90 +260,80 @@ export default function AddProduct() {
                   onChange={formik.handleChange}
                   error={formik.touched.id_category && Boolean(formik.errors.id_category)}>
                   {categories?.map((c: any) => {
-                    return <MenuItem value={c.id}>{c.category}</MenuItem>;
+                    return (
+                      <MenuItem value={c.id}>{c.category}</MenuItem>
+                    )
                   })}
                 </Select>
               </Grid>
               {/* details */}
               <Grid pl={2}>
-                <FieldArray name='details.size'>
+                <FieldArray name="details.size">
                   {({ push, remove }) => (
                     <React.Fragment>
                       <Grid item>
-                        <Typography variant='body2'>Size</Typography>
+                        <Typography variant="body2">Size</Typography>
                       </Grid>
                       {formik.values.details.size.map((_, index) => (
                         <Grid mb={1} container item>
                           <Grid item>
-                            <Select
-                              size='medium'
-                              fullWidth
-                              onChange={formik.handleChange}
-                              name={`details.size[${index}].id`}>
+                            <Select size='medium' value={formik.values.details.size[index].id} fullWidth onChange={formik.handleChange} name={`details.size[${index}].id`}>
                               {sizes.sizes.map((s: any) => {
-                                return <MenuItem value={s.id}>{s.size}</MenuItem>;
+                                return (
+                                  <MenuItem value={s.id}>{s.size}</MenuItem>
+                                )
                               })}
                             </Select>
                           </Grid>
-                          <Grid ml={1} item>
+                          <Grid pl={1} item>
                             <TextField
+                              error={formik.touched.sell_price && Boolean(formik.errors.sell_price)}
+                              helperText={formik.touched.sell_price && formik.errors.sell_price}
                               type='number'
                               fullWidth
                               size='medium'
-                              label='Stock'
+                              label="Stock"
                               name={`details.size[${index}].stock`}
                               onChange={formik.handleChange}
                             />
                           </Grid>
-                          <Grid
-                            display='flex'
-                            alignItems='center'
-                            justifyContent='center'
-                            ml={2}
-                            item>
-                            <Button
-                              fullWidth
-                              size='large'
-                              variant='contained'
-                              onClick={() => remove(index)}>
-                              Delete
-                            </Button>
+                          <Grid display='flex' alignItems="center"
+                            justifyContent="center" ml={1} item>
+                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}
-                      <Grid mt={2} item>
-                        <Button
-                          fullWidth
-                          variant='contained'
-                          onClick={() => push({ id: '', stock: 0 })}>
-                          Add Size
-                        </Button>
+                      <Grid ml={1} mt={2} item>
+                        <Button fullWidth variant="contained" onClick={() => push({ id: "", stock: 0 })} >Add Size</Button>
                       </Grid>
                     </React.Fragment>
                   )}
                 </FieldArray>
-              </Grid>
-              {/* IMAGES */}
-              <Grid item xs={12} sm={12}>
-                <>
-                  <Button fullWidth variant='outlined' color='inherit' component='label'>
-                    Upload Images
-                    <input
+                <Grid ml={1} mt={2} item xs={12} sm={12}>
+                  <>
+                    <Input
+                      error={formik.touched.file && Boolean(formik.errors.file)}
+                      required
                       hidden
                       type='file'
                       id='file'
                       name='file'
-                      multiple
+                      inputProps={
+                        { multiple: true }
+                      }
                       onChange={(event: any) => {
-                        formik.setFieldValue('file', event.target.files);
+                        formik.setFieldValue("file", event.target.files)
                       }}
                     />
-                  </Button>
-                  {console.log(formik.values)}
-                </>
+                    {console.log(formik.values)}
+                  </>
+                </Grid>
               </Grid>
+              {/* IMAGES */}
+
               {/* Images Test */}
-              <Grid item xs={12} sm={12}></Grid>
+              <Grid item xs={12} sm={12}>
+              </Grid>
               {/* END */}
               <Grid item xs={12}>
                 {/* <FormControlLabel
@@ -371,5 +360,5 @@ export default function AddProduct() {
       <DeleteProduct />
       <UpdateStock />
     </FormikProvider>
-  );
+  )
 }
