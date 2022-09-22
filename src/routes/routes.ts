@@ -56,4 +56,17 @@ export const Endpoint = {
   postSizes:`${URL.baseURL}/products/details/sizes`,
   deleteSizes:`${URL.baseURL}/products/details/sizes`,
   postCategories:`${URL.baseURL}/category`,
+  product: `${URL.baseURL}/products`,
+  getColor: `${URL.baseURL}/products/details/color`,
+  getSizes: `${URL.baseURL}/products/details/sizes`,
+  getCategories: `${URL.baseURL}/category`,
+  email: `${URL.baseURL}/email`,
+  orders: `${URL.baseURL}/orders`,
+  usersCart: `${URL.baseURL}/users/cart`,
 };
+
+
+
+
+
+
