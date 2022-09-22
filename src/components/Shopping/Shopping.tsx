@@ -100,7 +100,7 @@ export default function Shopping() {
                   navigate(PublicRoutes.login)
                 }, 1000)
               } else {
-                if(!addresses) {
+                if(!addresses.length) {
                   Swal.fire({
                     icon:'error',
                     text: "You don't have any address to select, please add one",
