@@ -29,7 +29,7 @@ export const FavouritesCards = () => {
         <Box display='flex' width='100%' flexWrap='wrap'>
         {isLoading || deleteLoading && 
                 <Backdrop
-                  sx={{ color: 'primary.main', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  sx={{ color: 'primary.main', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
                   open={true}
                 ><CircularProgress color="inherit" size={200}/></Backdrop>}
         {!favs?.lenght && <Typography mt={2} variant='h6' fontWeight={100}>There are no favourites products, go to products section and select your favourites!</Typography>}
