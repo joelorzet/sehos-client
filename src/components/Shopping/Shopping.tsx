@@ -111,7 +111,7 @@ export default function Shopping() {
                   }, 1500)
                 } else {
                   const options: any = {}
-                  addresses.map(a => { options[a.id ? a.id : 0] = `${a.address} - ${a.city}`})
+                  addresses.map((a: any) => { options[a.id ? a.id : 0] = `${a.address} - ${a.city}`})
                   Swal.fire({
                   title: 'Please, select one address',
                   icon: 'question',
@@ -123,7 +123,7 @@ export default function Shopping() {
                   cancelButtonColor: '#d33'
                     }).then(async (result) => {
                     if (result.isConfirmed) {
-                      const addressSelected = addresses?.find(el => el.id.toString() === result.value)
+                      const addressSelected = addresses?.find((el: any) => el.id.toString() === result.value)
                       window.localStorage.setItem('deliveryAddress', JSON.stringify(addressSelected))
                       navigate(PrivatesRoutes.checkout)
                     }
