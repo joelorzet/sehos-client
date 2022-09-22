@@ -63,7 +63,7 @@ const Shoe: React.FC<Props> = props => {
     props.addTouched(e.currentTarget.id)
     if(!user.user) {
         if(findedProduct) {
-          const maxStock = cartProduct?.sizeCart?.stock && findedProduct.quantity && (cartProduct.sizeCart.stock - findedProduct.quantity)
+          const maxStock = findedProduct?.sizeCart?.stock && findedProduct.quantity && (findedProduct.sizeCart.stock - findedProduct.quantity)
           if(maxStock === 0) {
             Swal.fire({
               title: 'Wait!',
