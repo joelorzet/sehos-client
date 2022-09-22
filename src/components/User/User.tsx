@@ -26,7 +26,7 @@ export default function User() {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const auth = useAuth()
   const storage = window.localStorage?.getItem('user');
   const userAuth = storage ? JSON.parse(storage) : {};
 
@@ -40,7 +40,6 @@ export default function User() {
     identification: null,
   };
 
-  const [login, setLogin] = useState(false);
   const [user, setUser] = useState(initial);
   const [openDial, setOpenDial] = useState(false);
   const handleOpenBackdrop = () => setOpenDial(true);
@@ -50,7 +49,6 @@ export default function User() {
     const local = window.localStorage.getItem('userInfo');
     if (local) {
       setUser(JSON.parse(local));
-      setLogin(true);
     } else {
       setUser(initial);
     }
@@ -179,7 +177,6 @@ export default function User() {
 
         <MenuItem
           onClick={() => {
-            setLogin(false);
             dispatch(reset());
             dispatch(resetUser());
             dispatch(resetUserInfo());
@@ -211,8 +208,8 @@ export default function User() {
           </IconButton>
         </Tooltip>
       </Box>
-      {!login && renderMenuSign()}
-      {login && renderMenuLogged()}
+      {!auth.user && renderMenuSign()}
+      {auth.user && renderMenuLogged()}
     </>
   );
 }
