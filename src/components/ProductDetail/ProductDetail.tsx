@@ -49,11 +49,8 @@ export default function ProductDetail() {
     price: shoe.sell_price,
     quantity: 1,
   };
-  const maxGralStock = !user
-    ? cartProduct?.sizeCart?.stock &&
-      findedProduct?.quantity &&
-      cartProduct.sizeCart.stock - findedProduct.quantity
-    : findedProduct?.sizeCart?.stock &&
+  const maxGralStock = 
+      findedProduct?.sizeCart?.stock &&
       findedProduct.quantity &&
       findedProduct.sizeCart.stock - findedProduct.quantity;
 
