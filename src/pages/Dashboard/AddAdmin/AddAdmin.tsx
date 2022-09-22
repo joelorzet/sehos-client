@@ -35,25 +35,25 @@ function AddAdmin() {
     userAuth.id !== user.id
       ? user.type_user === ADMIN
         ? Swal.fire({
-            text: 'Retirar permisos de Administrador?',
+            text: 'Remove Admin permissions?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Si!',
+            confirmButtonText: 'Yes!',
             cancelButtonText: 'No!',
           }).then(res => {
             if (res.isConfirmed) dispatch(changeAdminType(user));
           })
         : Swal.fire({
-            text: 'Dar permisos de Administrador?',
+            text: 'Give Administrator permissions?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Si!',
+            confirmButtonText: 'Yes!',
             cancelButtonText: 'No!',
           }).then(res => {
             if (res.isConfirmed) dispatch(changeAdminType(user));
           })
       : Swal.fire({
-          text: 'No te puedes retirar permisos, contacta a otro administrador',
+          text: 'You cannot withdraw permissions, contact another administrator',
           icon: 'warning',
         });
   };
@@ -64,7 +64,7 @@ function AddAdmin() {
     userAuth.id !== user.id
       ? user.isActive
         ? Swal.fire({
-            text: 'Quieres dar de baja a este usuario?',
+            text: 'Do you want to unsubscribe this user?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Si!',
@@ -73,7 +73,7 @@ function AddAdmin() {
             if (res.isConfirmed) dispatch(logicDeleteUser(id));
           })
         : Swal.fire({
-            text: 'Quieres dar de alta a este usuario?',
+            text: 'Do you want to subscribe this user?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Si!',
@@ -82,7 +82,7 @@ function AddAdmin() {
             if (res.isConfirmed) dispatch(restoreDeletedUser(id));
           })
       : Swal.fire({
-          text: 'No te puedes retirar permisos, contacta a otro administrador',
+          text: 'You cannot unsubscribe here, please go to your account settings',
           icon: 'warning',
         });
   };
@@ -105,7 +105,7 @@ function AddAdmin() {
                 mb: 2,
               }}>
               <Typography variant='h5' color='secondary' sx={{ m: 1, p: 1 }}>
-                Administradores:
+                Admins:
               </Typography>
             </Box>
             {adminUsers?.map((e: any) => (
@@ -171,7 +171,7 @@ function AddAdmin() {
                 mb: 2,
               }}>
               <Typography variant='h5' color='secondary' sx={{ m: 1, p: 1 }}>
-                Empleados:
+                Employees:
               </Typography>
             </Box>
             {employeeUsers?.map((e: any) => (
@@ -239,7 +239,7 @@ function AddAdmin() {
                   mb: 2,
                 }}>
                 <Typography variant='h5' color='secondary' sx={{ m: 1, p: 1 }}>
-                  Usuarios:
+                  Users:
                 </Typography>
               </Box>
               {normalUsers?.map((e: any) => (
