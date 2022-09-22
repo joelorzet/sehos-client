@@ -21,6 +21,10 @@ import ResetPassword from '@/pages/ResetPassword/ResetPassword';
 import ForgotPassword from '@/pages/ResetPassword/ForgotPassword';
 import AddAdmin from '@/pages/Dashboard/AddAdmin/AddAdmin';
 import OnlinePays from '@/components/OnlinePays/OnlinePays';
+import ManageProducts from '@/pages/Dashboard/Products/AddProduct/ManageProducts';
+import UpdateProduct from '@/pages/Dashboard/Products/AddProduct/UpdateProduct';
+import UpdateStock from '@/pages/Dashboard/Products/AddProduct/StockUpdate';
+import DeleteProduct from '@/pages/Dashboard/Products/AddProduct/DeleteProduct';
 
 // Lazy Loading
 const Cards = lazy(() => import('@/components/Cards/Cards'));
@@ -63,7 +67,10 @@ function App() {
 
               <Route element={<RoleGuard />}>
                 <Route path={PrivatesRoutes.dashboard} element={<Dashboard />}>
-                  <Route path={PrivatesRoutes.addProduct} element={<AddProduct />} />
+                  <Route path={PrivatesRoutes.deleteProduct} element={<DeleteProduct />} />
+                  <Route path={PrivatesRoutes.updateStock} element={<UpdateStock />} />
+                  <Route path={PrivatesRoutes.manageProduct} element={<AddProduct />} />
+                  <Route path={PrivatesRoutes.updateProduct} element={<UpdateProduct />} />
                   <Route path={PrivatesRoutes.addCategory} element={<AddCategory />} />
                   <Route path={PrivatesRoutes.addAttribute} element={<AddAttributes />} />
                   <Route path={PrivatesRoutes.addAdmin} element={<AddAdmin />} />

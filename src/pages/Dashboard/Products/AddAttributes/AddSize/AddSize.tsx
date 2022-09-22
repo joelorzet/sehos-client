@@ -17,56 +17,54 @@ import { getSizes } from '@/features/sizes/sizesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { ArrayInterpolation } from '@emotion/react';
+import { SizeI } from '@/sehostypes/Size'; 
 import { RootState } from '../../../../../store';
 import Loader from '@/app/Loader';
 import Divider from '@mui/material/Divider';
 import { Endpoint } from '@/routes/routes';
+import Swal from 'sweetalert2';
 
 /* VALIDACIONES */
 
 /* COMPONENT */
 // const isLoggedIn = useSelector((state: IRootState) => state.user.loggedIn)
-export default function addsize() {
-  const dispatch = useDispatch();
-  const sizes: any = useSelector((state: RootState) => state.sizes.sizes);
+export default function AddSize() {
+  const dispatch = useDispatch()
+  const sizes: any = useSelector((state: RootState) => state.sizes.sizes)
   useEffect(() => {
-    dispatch(getSizes());
-  }, []);
+    dispatch(getSizes())
+  }, [])
 
-  const sizesTraidas: Array<string> = sizes.map((c: any) => c.size.toString());
+  const sizesTraidas: Array<string> = sizes.map((c: SizeI) => c.size.toString())
+
   const validations = yup.object({
-    sizes: yup
-      .array(
-        yup.object({
-          size: yup
-            .string()
-            .required()
-            .min(1, 'Insert a valid size')
-            .max(15)
-            .notOneOf(sizesTraidas, 'You cannot add exitent sizes'),
-        }),
-      )
-      .min(1)
-      .max(3)
-      .required('Please, type at least one size'),
+    sizes: yup.array(yup.object({
+      size: yup.string().required().min(1, "Insert a valid size").max(15).notOneOf(sizesTraidas, 'You cannot add exitent sizes'),
+    })).min(1).max(3).required('Please, type at least one size')
   });
   /* HOOKS */
+  const auth = useAuth()
   const formik = useFormik({
-    initialValues: {
-      //!import correcto de los size y las sizes
-      sizes: [
-        {
-          size: '',
-        },
-      ], //! ver que esté cambiado size ->  id_size
+    initialValues: {  //!import correcto de los size y las sizes
+      sizes:
+        [{
+          size: ""
+        }], //! ver que esté cambiado size ->  id_size
     },
     validationSchema: validations,
-    onSubmit: async values => {
-      const post: any = await axios.post(Endpoint.postSizes, values);
+    onSubmit:async values => {
+      console.log(values)
+      const post:any = await axios.post(Endpoint.postSizes, values.sizes,{ headers: { "authorization": 'bearer ' + auth.token } })
+      Swal.fire({
+        text:'Sizes created successfully'
+      })
+      console.log(post);
     },
-  });
+  })
   if (!sizes.length) {
-    return <h1> </h1>;
+    return (
+        <h1> </h1>
+    )
   } else {
     return (
       <FormikProvider value={formik}>
@@ -80,28 +78,21 @@ export default function addsize() {
               alignItems: 'center',
             }}>
             {/* size */}
-            <Typography component='h1' variant='h5'>
-              Create Size
-            </Typography>
-            <Divider style={{ width: '100%' }} variant='middle' />
-            <Box
-              component='form'
-              noValidate
-              onSubmit={formik.handleSubmit}
-              method='POST'
-              action={Endpoint.product}
-              encType='multipart/form-data'
-              sx={{ mt: 3 }}>
+              <Typography component='h1' variant='h5'>
+                  Create Size
+                </Typography>
+                <Divider style={{width:'100%'}} variant='middle'/>
+            <Box component='form' noValidate onSubmit={formik.handleSubmit} method='POST' action='http://localhost:3001/products' encType='multipart/form-data' sx={{ mt: 3 }}>
               <Grid>
-                <FieldArray name='sizes'>
+                <FieldArray name="sizes">
                   {({ push, remove }) => (
                     <React.Fragment>
                       <Grid item>
-                        <Typography variant='body2'>size</Typography>
+                        <Typography variant="body2">size</Typography>
                       </Grid>
                       {formik.values.sizes.map((_, index) => (
                         <Grid container spacing={2} item>
-                          <Grid xs={8} item>
+                          <Grid xs={8}  item>
                             <TextField
                               size='small'
                               fullWidth
@@ -111,16 +102,12 @@ export default function addsize() {
                             />
                           </Grid>
                           <Grid item>
-                            <Button fullWidth variant='contained' onClick={() => remove(index)}>
-                              Delete
-                            </Button>
+                            <Button fullWidth variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}
                       <Grid mt={2} item>
-                        <Button fullWidth variant='contained' onClick={() => push({ size: '' })}>
-                          Add Size
-                        </Button>
+                        <Button fullWidth variant="contained" onClick={() => push({ size: '' })} >Add Size</Button>
                       </Grid>
                     </React.Fragment>
                   )}
@@ -146,8 +133,8 @@ export default function addsize() {
             </Box>
           </Box>
           {/* <Copyright sx={{ mt: 5 }} /> */}
-        </Container>
-      </FormikProvider>
-    );
+        </Container >
+      </FormikProvider >
+    )
   }
 }

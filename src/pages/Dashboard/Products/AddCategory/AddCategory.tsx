@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import Divider from '@mui/material/Divider';
-
+import DeleteCategory from './DeleteCategory';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Copyright from '../../../../components/Copyright/Copyright';
@@ -20,63 +20,55 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetCategoriesQuery, useGetSeasonsQuery } from '@/features';
 import axios from 'axios';
 import { ArrayInterpolation } from '@emotion/react';
+import { CategoryI } from '@/sehostypes/Category'; 
 import { getCategories } from '@/features/category/categoriesSlice';
 import { RootState } from '../../../../store';
 import Loader from '@/app/Loader';
 import { Endpoint } from '@/routes/routes';
+import Swal from 'sweetalert2';
 /* VALIDACIONES */
-//
+// 
 /* COMPONENT */
 // const isLoggedIn = useSelector((state: IRootState) => state.user.loggedIn)
-export default function addCategory() {
-  const auth = useAuth();
-  const dispatch = useDispatch();
-  const categorias: any = useSelector((state: RootState) => state.categories.categories);
+export default function AddCategory() {
+  const auth = useAuth()
+  const dispatch = useDispatch()
+  const categorias: any = useSelector((state: RootState) => state.categories.categories)
   useEffect(() => {
-    dispatch(getCategories());
-  }, []);
+    dispatch(getCategories())
+  }, [])
 
   const handleSubmitC: any = async (values: any) => {
-    const prueba = await fetch(Endpoint.postCategories, {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: { Authorization: `bearer ${auth.token}` },
-    });
-  };
-  const categoriasTraidas: Array<string> = categorias.map((c: any) => c.category);
+    //ver si el fetch está correcto 
+    const axiosP = await axios.post(Endpoint.postCategories, values.categories, { headers: { "authorization": 'bearer ' + auth.token } })
+  }
+  const categoriasTraidas: Array<string> = categorias.map((c: CategoryI) => c.category)
   const validations = yup.object({
-    categories: yup
-      .array(
-        yup.object({
-          category: yup
-            .string()
-            .required()
-            .min(3, 'Insert a valid category')
-            .max(15)
-            .notOneOf(categoriasTraidas, 'No se puede repetir categorias creadas anteriormente'),
-        }),
-      )
-      .min(1)
-      .max(3)
-      .required('Please, type at least one category'),
+    categories: yup.array(yup.object({
+      category: yup.string().required().min(3, "Insert a valid category").max(15).notOneOf(categoriasTraidas, 'No se puede repetir categorias creadas anteriormente'),
+    })).min(1).max(3).required('Please, type at least one category')
   });
   /* HOOKS */
   const formik = useFormik({
-    initialValues: {
-      //!import correcto de los size y las categories
-      categories: [
-        {
-          category: '',
-        },
-      ], //! ver que esté cambiado category ->  id_category
+    initialValues: {  //!import correcto de los size y las categories
+      categories:
+        [{
+          category: ""
+        }], //! ver que esté cambiado category ->  id_category
     },
     validationSchema: validations,
-    onSubmit: async values => {
-      handleSubmitC(values);
-    },
-  });
+    onSubmit: async (values, { resetForm }: any) => {
+      handleSubmitC(values)
+      Swal.fire({
+        text: '¡ Categoría creada con éxito !'
+      });
+      resetForm()
+    }
+  })
   if (!categorias.length) {
-    return <h1> </h1>;
+    return (
+      <h1> </h1>
+    )
   } else {
     return (
       <FormikProvider value={formik}>
@@ -94,20 +86,13 @@ export default function addCategory() {
               Create Category
             </Typography>
             <Divider style={{ width: '100%' }} variant='middle' />
-            <Box
-              component='form'
-              noValidate
-              onSubmit={formik.handleSubmit}
-              method='POST'
-              action={Endpoint.product}
-              encType='multipart/form-data'
-              sx={{ mt: 3 }}>
+            <Box component='form' noValidate onSubmit={formik.handleSubmit} method='POST' action='http://localhost:3001/products' encType='multipart/form-data' sx={{ mt: 3 }}>
               <Grid>
-                <FieldArray name='categories'>
+                <FieldArray name="categories">
                   {({ push, remove }) => (
                     <React.Fragment>
-                      <Grid mb={4} item>
-                        <Typography variant='body2'>Category</Typography>
+                      <Grid item>
+                        <Typography variant="body2">Category</Typography>
                       </Grid>
                       {formik.values.categories.map((_, index) => (
                         <Grid container spacing={2} item>
@@ -121,19 +106,12 @@ export default function addCategory() {
                             />
                           </Grid>
                           <Grid item>
-                            <Button fullWidth variant='contained' onClick={() => remove(index)}>
-                              Delete
-                            </Button>
+                            <Button fullWidth variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}
                       <Grid mt={2} item>
-                        <Button
-                          fullWidth
-                          variant='contained'
-                          onClick={() => push({ category: '' })}>
-                          Add Size
-                        </Button>
+                        <Button fullWidth variant="contained" onClick={() => push({ category: '' })} >Add Category</Button>
                       </Grid>
                     </React.Fragment>
                   )}
@@ -158,9 +136,7 @@ export default function addCategory() {
               </Grid>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
         </Container>
       </FormikProvider>
-    );
-  }
-}
+    )
+  }}
