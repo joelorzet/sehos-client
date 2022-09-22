@@ -19,12 +19,21 @@ const validations = yup.object({
     .string()
     .min(3, 'Min 3 characters')
     .max(50, 'Max 50 characters')
-    .nullable()
-    .required('Username is required'),
+    .nullable(),
   phone: yup.string().nullable().required('Phone is required'),
 });
 
-export default function AccountInfo({ handleClose }: any) {
+const validateData = (data: any) => {
+  let newData: any = {}
+  
+  for(const val in data) {
+    if(!Boolean(data[val])) delete data[val]
+    else newData[val] = data[val]
+  }
+  return newData;
+}
+
+export default function AccountInfo({ handleClose }: {handleClose: Function}) {
   const [updateUser, result] = useUpdateUserMutation();
   const [edit, setEdit] = useState(true);
   const auth = useAuth();
@@ -38,7 +47,8 @@ export default function AccountInfo({ handleClose }: any) {
     },
     validationSchema: validations,
     onSubmit: (values: any, { resetForm }: any) => {
-      updateUser(values)
+      const validated = validateData(values)
+      updateUser(validated)
         .then(() => handleClose())
         .then(() =>
           Swal.fire({
@@ -121,7 +131,7 @@ export default function AccountInfo({ handleClose }: any) {
               type='submit'
               color='secondary'
               variant='contained'
-              disabled={!isValid || edit}
+              disabled={!isValid || edit || (formik.values.username === '' && formik.values.phone === '')}
               sx={{ mt: 3, mb: 2 }}>
               {result.isLoading ? <CircularProgress size={20} color='primary' /> : 'update'}
             </Button>
