@@ -35,6 +35,7 @@ export const FavouritesCards = () => {
         {favs?.map(fav =>  
             (<>
                 <Card
+                key={fav.id_details}
                 sx={{ maxWidth: '40%' }}
                 style={{
                     height: '30vh',
