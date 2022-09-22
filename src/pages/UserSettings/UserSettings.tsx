@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import { Outlet } from 'react-router-dom';
-import { mainListItems, secondaryListItems } from './listItems/listItems';
+import { MainListItems } from './listItems/listItems';
 
 function UserSettingsContent() {
   const { id: userId } = useAuth();
@@ -17,9 +17,7 @@ function UserSettingsContent() {
       <Grid container sm spacing={2}>
         <Grid item xs={6} sm={3} xl={3}>
           <List component='nav'>
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            <MainListItems/>
           </List>
         </Grid>
 
