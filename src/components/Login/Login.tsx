@@ -17,8 +17,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector  } from 'react-redux';
-import { LoginRequest,  useLoginMutation  } from '../../features/auth/authApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginRequest, useLoginMutation } from '../../features/auth/authApiSlice';
 import { createUser, resetUser } from '../../features/auth/authSlice';
 import { useAuth } from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
@@ -36,11 +36,13 @@ const validations = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
+const today = new Date();
+
 const googleValidation = yup.object().shape({
   username: yup.string().required('Username is required'),
   phone: yup.number().required('Phone number is required'),
-  identification: yup.number().required('Identification is required'),
-  birth_date: yup.date().required('Birthdate is required'),
+  identification: yup.number().max(9999999999).required('Identification is required'),
+  birth_date: yup.date().max(today).required('Birthdate is required'),
 });
 
 export default function Login() {
@@ -78,7 +80,7 @@ export default function Login() {
       email: res.profileObj.email,
       password: res.googleId,
     };
-    
+
     try {
       const Logged = await login(loginUserData).unwrap();
 
