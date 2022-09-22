@@ -37,12 +37,11 @@ const Shoe: React.FC<Props> = props => {
   const {products, loading} = useSelector((state:RootState) => user.user ? state.apiCart : state.cart)
   const findedProduct = products.find((el: CartI) => el.idProduct === props.id)
   const getFavs = () => {
-    let data;
-    if(user.id) data = useGetFavouritesQuery(user.id).data
+    const {data} = useGetFavouritesQuery(user.id)
     return data
   }
-  const favs = getFavs()
-  const findedFav = favs?.find(el => el.id_details === props.id)
+  const favs = user.id && getFavs()
+  const findedFav = favs?.find((el: any) => el.id_details === props.id)
   const [deleteFavourites, {isLoading: deleteLoading}] = useDeleteFavouritesMutation()
   const [createFavourites, {isLoading}] = useCreateFavouritesMutation() 
  
