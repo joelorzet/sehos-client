@@ -21,7 +21,7 @@ export default function Shopping() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [localtotal, setLocalTotal] = useState(0)
-    const {data: addresses, isLoading} = useGetAddressQuery()
+    const {data: addresses} = useGetAddressQuery()
 
     useEffect(() => {window.scrollTo(0, 0)}, [])
 
@@ -100,7 +100,7 @@ export default function Shopping() {
                   navigate(PublicRoutes.login)
                 }, 1000)
               } else {
-                if(!addresses.length) {
+                if(!addresses?.length) {
                   Swal.fire({
                     icon:'error',
                     text: "You don't have any address to select, please add one",
