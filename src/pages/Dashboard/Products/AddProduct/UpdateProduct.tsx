@@ -97,7 +97,6 @@ export default function UpdateProduct() {
     });
     const handleFormSubmit = async (values: any) => {
     const axiosP = await axios.put(Endpoint.updateProduct, values, { headers: { "authorization": 'bearer ' + auth.token } })
-    console.log(axiosP)
 }
 
     return (

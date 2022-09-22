@@ -63,16 +63,12 @@ export default function UpdateStock() {
         validationSchema: validations,
         onSubmit: values => {
             handleFormSubmit(values)
-            console.log(values)
         },
     });
     const handleFormSubmit = async (values: any) => {
         const valores = JSON.stringify(values)
-        console.log('entramos al handle ');
-        console.log('estos son los values en el handle submit', values)
         if (values.id) {
             const axiosP = await axios.put(Endpoint.updateStock, values, { headers: { "authorization": 'bearer ' + auth.token } })
-            console.log(axiosP);
         }
     }
 
@@ -136,7 +132,7 @@ export default function UpdateStock() {
                                                         </Grid>
                                                         <Grid display='flex' alignItems="center"
                                                             justifyContent="center" ml={1} item>
-                                                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
+                                                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) :null}>Delete</Button>
                                                         </Grid>
                                                     </Grid>
                                                 ))}

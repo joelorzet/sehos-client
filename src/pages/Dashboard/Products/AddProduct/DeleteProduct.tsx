@@ -28,6 +28,7 @@ import { getSizes } from '@/features/sizes/sizesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetCategoriesQuery, useGetProductsQuery } from '@/features';
 import axios from 'axios';
+import { Endpoint } from '@/routes/routes';
 
 
 /* VALIDACIONES */
@@ -53,14 +54,10 @@ export default function DeleteProduct() {
         },
         validationSchema: validations,
         onSubmit: values => {
-            handleFormSubmit(values)
-            console.log(values)
-        },
+            handleFormSubmit(values)        },
     });
     const handleFormSubmit = async (values: any) => {
-        console.log(values)
-        const prueba = await axios.delete("http://localhost:3001/products", { data: values, headers: { "Authorization": `bearer ${auth.token}` } })
-        console.log(prueba)
+        const prueba = await axios.delete(Endpoint.deleteProduct, { data: values, headers: { "Authorization": `bearer ${auth.token}` } })
     }
 
     return (

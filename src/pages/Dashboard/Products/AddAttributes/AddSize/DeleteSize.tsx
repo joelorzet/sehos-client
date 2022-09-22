@@ -45,7 +45,6 @@ export default function DeleteSize() {
         },
         validationSchema: validations,
         onSubmit: async (values, { resetForm }) => {
-            console.log(values)
             const post: any = await axios.delete(Endpoint.postSizes, { data: values, headers: { "Authorization": `bearer ${auth.token}` } })
             Swal.fire({
                 text: 'Sizes deleted successfully'

@@ -40,9 +40,8 @@ export default function DeleteCategory() {
     const categorias: any = useSelector((state: RootState) => state.categories.categories)
 
     const handleSubmitC: any = async (values: any) => {
-        console.log(values) //ver si el fetch está correcto 
+    //ver si el fetch está correcto 
         const axiosP = await axios.delete(Endpoint.postCategories, { data: values, headers: { "Authorization": `bearer ${auth.token}` } })
-        console.log(axiosP);
     }
     const categoriasTraidas: Array<string> = categorias.map((c: CategoryI) => c.category)
     const validations = yup.object({

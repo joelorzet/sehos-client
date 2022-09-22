@@ -102,7 +102,7 @@ export default function AddSize() {
                             />
                           </Grid>
                           <Grid item>
-                            <Button fullWidth variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
+                            <Button fullWidth variant="contained" onClick={() => index > 0 ? remove(index) : null}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}

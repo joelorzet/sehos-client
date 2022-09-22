@@ -116,7 +116,6 @@ export default function AddProduct() {
       for (let filo of values.file) {
         formData.append("image", filo)
       }
-      console.log(formData)
     }
     await fetch(Endpoint.postProduct, { method: "POST", body: formData, headers: { "Authorization": `bearer ${auth.token}` } });
   }
@@ -296,7 +295,7 @@ export default function AddProduct() {
                           </Grid>
                           <Grid display='flex' alignItems="center"
                             justifyContent="center" ml={1} item>
-                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
+                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : null}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}
