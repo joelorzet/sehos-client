@@ -65,6 +65,7 @@ export interface Orders {
   order_state: string;
   total: number;
   size: string
+  quantity: number
 
 }
 export interface ProductsAdmin {
@@ -81,6 +82,22 @@ export interface ProductsAdmin {
   reviews: Rating[]
   details?: Details
   Orders_details: Orders[]
+  totalVentas?: number
+} 
+export interface ProductsAdminCard {
+   id: number;
+  name: string;
+  description?: string;
+  gender?: string;
+  season?: string;
+  rate_average?: string;
+  buyPrice: number;
+  sellPrice: number;
+  sold?: number;
+  Category?: Category;
+  reviews?: Rating[]
+  details?: Details
+  Orders: Orders[]
   totalVentas?: number
 } 
 

@@ -7,6 +7,8 @@ import { searchReducer } from './searchReducer';
 const initialState: any = {
   allProducts: [],
   renderProducts: [],
+  productsAdmin: [],
+  regla: [],
   product: {}
 };
 
@@ -91,6 +93,12 @@ export const productsSlice = createSlice({
 
       state.allProducts = orderProducts;
     },
+    setProductsAdmin: (state, action) => {
+      state.productsAdmin = action.payload
+    },
+    setRegla: (state, action) => {
+      state.regla = action.payload
+    },
   },
   extraReducers: builder => {
     searchReducer(builder)
@@ -108,6 +116,8 @@ export const {
   setSearchProducts,
   resetSearch,
   sortProducts,
+  setProductsAdmin,
+  setRegla
 } = productsSlice.actions;
 
 // exportamos el reducer que va para el store, esto se puede hacer de distintas formas en este caso lo hare con un default
