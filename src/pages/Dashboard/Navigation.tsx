@@ -33,6 +33,7 @@ export default function Navigation() {
 
   function handleClick(event: React.MouseEvent<Element, MouseEvent>) {
     event.preventDefault();
+    console.info('You clicked a breadcrumb.');
   }
 
   return (
@@ -52,21 +53,30 @@ export default function Navigation() {
             <StyledBreadcrumb
               component='a'
               href='#'
-              label='Create Product'
-              onClick={() => navigate(PrivatesRoutes.addProduct)}
+              label='Manage Product'
+              onClick={() => navigate(PrivatesRoutes.manageProduct)}
               icon={<AddShoppingCartIcon fontSize='small' />}
             />
             <StyledBreadcrumb
               component='a'
               href='#'
-              label='Create Category'
-              onClick={() => navigate(PrivatesRoutes.addCategory)}
-              icon={<CategoryIcon fontSize='small' />}
+              label='Update Product'
+              onClick={() => navigate(PrivatesRoutes.updateProduct)}
+              icon={<AddShoppingCartIcon fontSize='small' />}
             />
+
             <StyledBreadcrumb
               component='a'
               href='#'
-              label='Create Atribute'
+              label='Delete Product'
+              onClick={() => navigate(PrivatesRoutes.deleteProduct)}
+              icon={<AddShoppingCartIcon fontSize='small' />}
+            />
+
+            <StyledBreadcrumb
+              component='a'
+              href='#'
+              label='Manage Atributes'
               onClick={() => navigate(PrivatesRoutes.addAttribute)}
               icon={<AddchartIcon fontSize='small' />}
             />

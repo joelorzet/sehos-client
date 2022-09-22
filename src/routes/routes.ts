@@ -14,7 +14,7 @@ export const PublicRoutes = {
   resetPassword: '/reset-password/:name',
   forgotPassword: '/reset-password',
   error: '*',
-  adproduc: '/pruebaAdProduct',
+  adproduc:"/pruebaAdProduct"
 };
 
 export const PrivatesRoutes = {
@@ -29,10 +29,14 @@ export const PrivatesRoutes = {
 
   admin: '/admin',
   dashboard: '/dashboard',
+  deleteProduct:'deleteProduct',
+  manageProduct:'manageProduct',
+  updateProduct:'updateProduct',
   addProduct: 'addProduct',
   addCategory: 'addcategory',
   addAttribute: 'addattribute',
   addAdmin: 'manage-users',
+  updateStock:'updateStock'
 };
 
 export const URL = {
@@ -45,18 +49,24 @@ export const Endpoint = {
   getUsers: `${URL.baseURL}/users`,
   deleteUser: `${URL.baseURL}/users`,
   modifyUser: `${URL.baseURL}/users`,
-  postProduct: `${URL.baseURL}/products`,
-  product: `${URL.baseURL}/products`,
+  postProduct:`${URL.baseURL}/products`,
   updateProduct: `${URL.baseURL}/products`,
   deleteProduct: `${URL.baseURL}/products`,
   updateStock: `${URL.baseURL}/products/details`,
+  postSizes:`${URL.baseURL}/products/details/sizes`,
+  deleteSizes:`${URL.baseURL}/products/details/sizes`,
+  postCategories:`${URL.baseURL}/category`,
+  product: `${URL.baseURL}/products`,
   getColor: `${URL.baseURL}/products/details/color`,
-  postSizes: `${URL.baseURL}/products/details/sizes`,
   getSizes: `${URL.baseURL}/products/details/sizes`,
-  deleteSizes: `${URL.baseURL}/products/details/sizes`,
-  postCategories: `${URL.baseURL}/category`,
   getCategories: `${URL.baseURL}/category`,
   email: `${URL.baseURL}/email`,
   orders: `${URL.baseURL}/orders`,
   usersCart: `${URL.baseURL}/users/cart`,
 };
+
+
+
+
+
+

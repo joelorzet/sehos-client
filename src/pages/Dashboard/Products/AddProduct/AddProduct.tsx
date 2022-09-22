@@ -27,19 +27,16 @@ import MenuItem from '@mui/material/MenuItem';
 import { getSizes } from '@/features/sizes/sizesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetCategoriesQuery, useGetProductQuery } from '@/features';
-import axios from 'axios';
 import DeleteProduct from './DeleteProduct'
 import UpdateStock from './StockUpdate';
 import { Endpoint } from '@/routes/routes';
 import { array } from 'yup/lib/locale';
+import UpdateProduct from './UpdateProduct';
 
-export const testLength = (value: any) => {
-  value.length > 0 ? true : false
-}
 /* VALIDACIONES */
 const validations = yup.object({
-  file: yup.mixed().test('size', 'falta agregar algo', (value)=>value.length>0).required(),
-  name: yup.string().required('casco'),
+  file: yup.mixed().test('size', 'must upload at least one image', (value)=>value.length>0).required('must upload at least one image'),
+  name: yup.string().required('please type the product name'),
   description: yup.string().required('Description is required'),
   buy_price: yup
     .number()
@@ -96,7 +93,7 @@ export default function AddProduct() {
       season: '',
       buy_price: '',
       sell_price: '',
-      file: '',
+      file: [],
       details: {
         id_color: 1, //!   id color ver como registrar
         size: [{ id: 1, stock: 0 }]  //!sizes : ver que se envie un id y un stock en total 
@@ -119,7 +116,6 @@ export default function AddProduct() {
       for (let filo of values.file) {
         formData.append("image", filo)
       }
-      console.log(formData)
     }
     await fetch(Endpoint.postProduct, { method: "POST", body: formData, headers: { "Authorization": `bearer ${auth.token}` } });
   }
@@ -299,7 +295,7 @@ export default function AddProduct() {
                           </Grid>
                           <Grid display='flex' alignItems="center"
                             justifyContent="center" ml={1} item>
-                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : console.log('no se puede')}>Delete</Button>
+                            <Button fullWidth size='large' variant="contained" onClick={() => index > 0 ? remove(index) : null}>Delete</Button>
                           </Grid>
                         </Grid>
                       ))}
@@ -325,7 +321,6 @@ export default function AddProduct() {
                         formik.setFieldValue("file", event.target.files)
                       }}
                     />
-                    {console.log(formik.values)}
                   </>
                 </Grid>
               </Grid>
@@ -357,8 +352,6 @@ export default function AddProduct() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-      <DeleteProduct />
-      <UpdateStock />
     </FormikProvider>
   )
 }

@@ -20,147 +20,103 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetCategoriesQuery, useGetSeasonsQuery } from '@/features';
 import axios from 'axios';
 import { ArrayInterpolation } from '@emotion/react';
-import { getCategories } from '@/features/category/categoriesSlice';
+import { CategoryI } from '@/sehostypes/Category'; 
+import { categories, getCategories } from '@/features/category/categoriesSlice';
 import { RootState } from '../../../../store';
 import Loader from '@/app/Loader';
 import { Endpoint } from '@/routes/routes';
+import { checkGridRowIdIsValid } from '@mui/x-data-grid';
+import Swal from 'sweetalert2';
 /* VALIDACIONES */
-//
+// 
 /* COMPONENT */
 // const isLoggedIn = useSelector((state: IRootState) => state.user.loggedIn)
-export default function addCategory() {
-  const auth = useAuth();
-  const dispatch = useDispatch();
-  const categorias: any = useSelector((state: RootState) => state.categories.categories);
-  useEffect(() => {
-    dispatch(getCategories());
-  }, []);
+export default function DeleteCategory() {
+    const auth = useAuth()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getCategories())
+    }, [])
+    const categorias: any = useSelector((state: RootState) => state.categories.categories)
 
-  const handleSubmitC: any = async (values: any) => {
-    const prueba = await fetch(Endpoint.getCategories, {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: { Authorization: `bearer ${auth.token}` },
+    const handleSubmitC: any = async (values: any) => {
+    //ver si el fetch está correcto 
+        const axiosP = await axios.delete(Endpoint.postCategories, { data: values, headers: { "Authorization": `bearer ${auth.token}` } })
+    }
+    const categoriasTraidas: Array<string> = categorias.map((c: CategoryI) => c.category)
+    const validations = yup.object({
+        id:yup.number().required('please select at least one')
     });
-  };
-  const categoriasTraidas: Array<string> = categorias.map((c: any) => c.category);
-  const validations = yup.object({
-    categories: yup
-      .array(
-        yup.object({
-          category: yup
-            .string()
-            .required()
-            .min(3, 'Insert a valid category')
-            .max(15)
-            .notOneOf(categoriasTraidas, 'No se puede repetir categorias creadas anteriormente'),
-        }),
-      )
-      .min(1)
-      .max(3)
-      .required('Please, type at least one category'),
-  });
-  /* HOOKS */
-  const formik = useFormik({
-    initialValues: {
-      //!import correcto de los size y las categories
-      categories: [
-        {
-          category: '',
+    /* HOOKS */
+    const formik = useFormik({
+        initialValues: {  //!import correcto de los size y las categories
+            id: 1,
         },
-      ], //! ver que esté cambiado category ->  id_category
-    },
-    validationSchema: validations,
-    onSubmit: async values => {
-      handleSubmitC(values);
-    },
-  });
-  if (!categorias.length) {
-    return <Loader size={25} />;
-  } else {
-    return (
-      <FormikProvider value={formik}>
-        <Container component='main' maxWidth='xs'>
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}>
-            {/* Category */}
-            <Typography component='h1' variant='h5'>
-              Create Category
-            </Typography>
-            <Divider style={{ width: '100%' }} variant='middle' />
-            <Box
-              component='form'
-              noValidate
-              onSubmit={formik.handleSubmit}
-              method='POST'
-              action={Endpoint.product}
-              encType='multipart/form-data'
-              sx={{ mt: 3 }}>
-              <Grid>
-                <FieldArray name='categories'>
-                  {({ push, remove }) => (
-                    <React.Fragment>
-                      <Grid mb={4} item>
-                        <Typography variant='body2'>Category</Typography>
-                      </Grid>
-                      {formik.values.categories.map((_, index) => (
-                        <Grid container spacing={2} item>
-                          <Grid xs={8} item>
-                            <TextField
-                              size='small'
-                              fullWidth
-                              name={`categories[${index}].category`}
-                              onChange={formik.handleChange}
-                              error={formik.touched.categories && Boolean(formik.errors.categories)}
-                            />
-                          </Grid>
-                          <Grid item>
-                            <Button fullWidth variant='contained' onClick={() => remove(index)}>
-                              Delete
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      ))}
-                      <Grid mt={2} item>
-                        <Button
-                          fullWidth
-                          variant='contained'
-                          onClick={() => push({ category: '' })}>
-                          Add Size
-                        </Button>
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                </FieldArray>
-              </Grid>
-              {/* END */}
-              <Grid item xs={12}>
-                {/* <FormControlLabel
-                control={<Checkbox value='allowExtraEmails' color='primary' />}
-                label='I want to receive inspiration, marketing promotions and updates via email.'
-              /> */}
-              </Grid>
-              <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Create Category
-              </Button>
-              <Grid container justifyContent='flex-end'>
-                <Grid item>
-                  {/* <Link href='#' variant='body2'>
-                No hay categorias
-              </Link> */}
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-          <Copyright sx={{ mt: 5 }} />
-        </Container>
-      </FormikProvider>
-    );
-  }
+        validationSchema: validations,
+        onSubmit: async (values,{resetForm}:any) => {
+            handleSubmitC(values)
+            Swal.fire({
+                text:'Categories deleted successfully'
+            })
+            resetForm()
+        },
+    })
+    if (!categorias.length) {
+        return (
+            <h1> </h1>
+        )
+    } else {
+        return (
+            <FormikProvider value={formik}>
+                <Container component='main' maxWidth='xs'>
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}>
+                        {/* Category */}
+                        <Typography component='h1' variant='h5'>
+                            Delete category
+                        </Typography>
+                        <Divider style={{ width: '100%' }} variant='middle' />
+                        <Box component='form' noValidate onSubmit={formik.handleSubmit} method='POST' action='http://localhost:3001/products' encType='multipart/form-data' sx={{ mt: 3 }}>
+                            <Grid spacing={2}>
+                                <Grid pl={2}>
+                                    <React.Fragment>
+                                        <Grid item>
+                                            <Typography variant="body2">Category</Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12}>
+                                            <Select fullWidth style={{ width: '100%' }} onChange={formik.handleChange} name={`id`}>
+                                                {categorias?.map((s: any) => {
+                                                    return (
+                                                        <MenuItem value={s.id}>{s.category}</MenuItem>
+                                                    )
+                                                })}
+                                            </Select>
+                                        </Grid>
+                                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                                            Delete category
+                                        </Button>
+                                    </React.Fragment>
+                                </Grid>
+                                {/* END */}
+                            </Grid>
+
+                            <Grid container justifyContent='flex-end'>
+                                <Grid item>
+                                    {/* <Link href='#' variant='body2'>
+                                No hay categorias
+                                </Link> */}
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Box>
+                </Container >
+            </FormikProvider >
+        )
+    }
 }
