@@ -119,12 +119,12 @@ export default function ProductDetail() {
           Swal.fire({
             title: 'Wait! that products is already on your cart, we will add this',
             html:
-              `<p>Current Available Stock: ${maxStock}</p>` +
+              `<p>Current Available Stock: ${maxGralStock}</p>` +
               `<p>Current Selected Size: ${findedProduct.sizeCart?.size}</p>`,
             input: 'number',
             inputAttributes: {
               autocapitalize: 'off',
-              max: `${maxStock}`,
+              max: `${maxGralStock}`,
             },
             showCancelButton: true,
             confirmButtonText: 'Update',
