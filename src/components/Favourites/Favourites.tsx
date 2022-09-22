@@ -34,52 +34,53 @@ export const FavouritesCards = () => {
                 ><CircularProgress color="inherit" size={200}/></Backdrop>}
         {!favs?.lenght && <Typography mt={2} variant='h6' fontWeight={100}>There are no favourites products, go to products section and select your favourites!</Typography>}
         {favs?.map((fav: any) =>  
-            (<>
-                <Card
-                key={fav.id_details}
-                sx={{ maxWidth: '40%' }}
-                style={{
-                    height: '30vh',
-                    width: '30vw',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderStyle: 'solid',
-                    borderColor: 'transparent',
-                    marginLeft: '20px',
-                    marginTop: '20px',
-                }}>
-                <Tooltip
-                title={fav.name}
-                TransitionComponent={Zoom}
-                sx={{ x: 1 }}
-                arrow>
-                <Box display='flex' alignItems='center' justifyContent='space-between'>
-                    <CardHeader
-                    color='inherit'
-                    titleTypographyProps={{ fontSize: 18 }}
-                    title={`${fav.name.slice(0,10)}...`}
-                    onClick={() => navigate(`${PublicRoutes.products}/${fav.id_details}`)}
-                    sx={{ cursor: 'pointer' }}
-                    />
-                    <IconButton
-                    disabled={deleteLoading} 
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e, fav.id_details)}
-                    >
-                        <Delete/>
-                    </IconButton>
+            (<Box width='50%' key={fav.id_details}>
+                <Box sx={{ width: '90%' }}>
+                    <Card
+                    sx={{ maxWidth: '100%' }}
+                    style={{
+                        height: '30vh',
+                        width: '30vw',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        borderStyle: 'solid',
+                        borderColor: 'transparent',
+                        marginLeft: '20px',
+                        marginTop: '20px',
+                    }}>
+                    <Tooltip
+                    title={fav.name}
+                    TransitionComponent={Zoom}
+                    sx={{ x: 1 }}
+                    arrow>
+                    <Box display='flex' alignItems='center' justifyContent='space-between'>
+                        <CardHeader
+                        color='inherit'
+                        titleTypographyProps={{ fontSize: 18 }}
+                        title={`${fav.name.slice(0,10)}...`}
+                        onClick={() => navigate(`${PublicRoutes.products}/${fav.id_details}`)}
+                        sx={{ cursor: 'pointer' }}
+                        />
+                        <IconButton
+                        disabled={deleteLoading} 
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleClick(e, fav.id_details)}
+                        >
+                            <Delete/>
+                        </IconButton>
+                    </Box>
+                    </Tooltip>
+                    <img src={fav.image} className={s.image}/>
+                    <CardContent color='inherit'>
+                        <Typography variant='body2' color='text.secondary'>
+                        Color: {fav.color}
+                        </Typography>
+                        <Typography variant='body2' color='text.secondary'>
+                        Price: ${fav.price}
+                        </Typography>
+                    </CardContent>
+                    </Card>
                 </Box>
-                </Tooltip>
-                <img src={fav.image} className={s.image}/>
-                <CardContent color='inherit'>
-                    <Typography variant='body2' color='text.secondary'>
-                    Color: {fav.color}
-                    </Typography>
-                    <Typography variant='body2' color='text.secondary'>
-                    Price: ${fav.price}
-                    </Typography>
-                </CardContent>
-                </Card>
-            </>)
+            </Box>)
         )}
         </Box>
     )
