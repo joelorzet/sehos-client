@@ -27,22 +27,23 @@ export const MainListItems = () => {
       text: 'Do you really want to delete your account?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si!',
+      confirmButtonText: 'Yes!',
       cancelButtonText: 'No!',
     }).then(res => {
-      if (res.isConfirmed) 
-      dispatch(logicDeleteUser(id))
-      dispatch(reset());
-      dispatch(resetUser());
-      dispatch(resetUserInfo());
-      Swal.fire({
-        icon:'info',
-        text: 'You will be redirect to home',
-        timer: 1000
-      })
-      setTimeout(() => {
-        navigate(PublicRoutes.home);
-      }, 1200);
+      if (res.isConfirmed) {
+        dispatch(logicDeleteUser(id))
+        dispatch(reset());
+        dispatch(resetUser());
+        dispatch(resetUserInfo());
+        Swal.fire({
+          icon:'info',
+          text: 'You will be redirect to home',
+          timer: 1000
+        })
+        setTimeout(() => {
+          navigate(PublicRoutes.home);
+        }, 1200);
+      }
     })
   }
   
