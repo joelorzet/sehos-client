@@ -180,9 +180,8 @@ const Shoe: React.FC<Props> = props => {
         icon: 'warning'
       })
     } else {
-        const findedFavs = favs?.find(f => f.id_details === props.id)
         props.addTouched(e.currentTarget.id)
-        if(findedFavs) {
+        if(findedFav) {
           props.id && await deleteFavourites({id_user: user.id, id_product_details: props.id})
           toast.success(<b>Correctly removed from favs!</b>);
         } else {
