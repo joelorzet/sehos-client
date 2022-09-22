@@ -61,24 +61,29 @@ function AddAdmin() {
   const onClickAction = (user: User) => {
     const id: number = user.id;
 
-    user.isActive
-      ? Swal.fire({
-          text: 'Quieres dar de baja a este usuario?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Si!',
-          cancelButtonText: 'No!',
-        }).then(res => {
-          if (res.isConfirmed) dispatch(logicDeleteUser(id));
-        })
+    userAuth.id !== user.id
+      ? user.isActive
+        ? Swal.fire({
+            text: 'Quieres dar de baja a este usuario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si!',
+            cancelButtonText: 'No!',
+          }).then(res => {
+            if (res.isConfirmed) dispatch(logicDeleteUser(id));
+          })
+        : Swal.fire({
+            text: 'Quieres dar de alta a este usuario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si!',
+            cancelButtonText: 'No!',
+          }).then(res => {
+            if (res.isConfirmed) dispatch(restoreDeletedUser(id));
+          })
       : Swal.fire({
-          text: 'Quieres dar de alta a este usuario?',
+          text: 'No te puedes retirar permisos, contacta a otro administrador',
           icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Si!',
-          cancelButtonText: 'No!',
-        }).then(res => {
-          if (res.isConfirmed) dispatch(restoreDeletedUser(id));
         });
   };
 
