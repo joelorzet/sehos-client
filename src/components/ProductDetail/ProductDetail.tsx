@@ -77,11 +77,7 @@ export default function ProductDetail() {
     e.preventDefault();
     if (!user) {
       if (findedProduct) {
-        const maxStock =
-          cartProduct?.sizeCart?.stock &&
-          findedProduct.quantity &&
-          cartProduct.sizeCart.stock - findedProduct.quantity;
-        if (maxStock === 0) {
+        if (maxGralStock === 0) {
           Swal.fire({
             title: 'Wait!',
             icon: 'error',
@@ -111,11 +107,7 @@ export default function ProductDetail() {
       }
     } else {
       if (findedProduct) {
-        const maxStock =
-          findedProduct?.sizeCart?.stock &&
-          findedProduct.quantity &&
-          findedProduct.sizeCart.stock - findedProduct.quantity;
-        if (maxStock === 0) {
+        if (maxGralStock === 0) {
           Swal.fire({
             title: 'Wait!',
             icon: 'error',
