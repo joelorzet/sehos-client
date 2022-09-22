@@ -96,12 +96,21 @@ export default function ProductDetail() {
           toast.success(<b>Correctly updated amount!</b>);
         }
       } else {
-        dispatch(addToLocalCart(cartProduct));
-        Swal.fire({
-          icon: 'success',
-          text: 'Product added successfully',
-          showConfirmButton: true,
-        });
+        const sizeFinded = cartProduct?.size?.find(el => el.size === sizeValue.value)
+        if(sizeFinded?.stock === 0) {
+          Swal.fire({
+            text: "Can't add this products cause there is not more stock available",
+            icon: 'warning'
+          })
+        } else {
+          cartProduct.sizeCart = sizeFinded
+          dispatch(addToLocalCart(cartProduct));
+          Swal.fire({
+            icon: 'success',
+            text: 'Product added successfully',
+            showConfirmButton: true,
+          });
+        }
       }
     } else {
       if (findedProduct) {
