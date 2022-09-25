@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { setProducts } from '../../features/product/productSlice';
 import { Toaster } from 'react-hot-toast';
-
+import { Backdrop, CircularProgress, Typography } from '@mui/material';
 
 
 
@@ -83,6 +83,12 @@ const Cards = () => {
           toastOptions={{duration: 500}}
           containerStyle={{position:'fixed', top: topToast && (topToast + 30), left: leftToast && (leftToast - 150), inset:'unset', width:300}}
         />
+        {!data && 
+        <Backdrop
+          sx={{ color: 'primary.main', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        ><CircularProgress color="inherit" size={200}/></Backdrop>}
+        {!products.length && <Typography mt={2} variant='h6' fontWeight={100}>There are no match products with that parameters, please reset your filters!</Typography>}
         {content}
       </div>
     </>

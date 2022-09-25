@@ -164,6 +164,13 @@ const handleClickPrices = () => {
   // const handleToggle = () => {
   //   setOpen(prevOpen => !prevOpen);
   // };
+  const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    data !== undefined && dispatch(setProducts(data));
+    setCategory('Todas las categorias')
+    setGender('Todos los Generos')  
+    setSeason('Todas las Temporadas')
+  }
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
@@ -375,9 +382,7 @@ const handleClickPrices = () => {
           <Button
               variant='contained'
               sx={{ mt: 2, marginBottom: 5 }}
-              onClick={() => {
-              data !== undefined && dispatch(setProducts(data));
-              }}>
+              onClick={resetFilters}>
               Reset
           </Button>
       </Tooltip>
